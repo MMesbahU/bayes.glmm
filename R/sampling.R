@@ -1,3 +1,4 @@
+
 myGWAS_sampling <- function(model, geno, data0, config0) {
   y = list()
 
@@ -5,7 +6,7 @@ myGWAS_sampling <- function(model, geno, data0, config0) {
     data1 = within(data0, {g = geno[i, ]})
 
     fit = sampling(model,
-                   data = dat1,
+                   data = data1,
                    chains = config0$chains,
                    iter = config0$iter,
                    warmup = config0$warmup,

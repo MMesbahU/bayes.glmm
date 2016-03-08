@@ -1,11 +1,11 @@
-\name{hello}
-\alias{hello}
-\title{Hello, World!}
+\name{myGWAS_sampling}
+\alias{myGWAS_sampling}
+\title{Model inference by MCMC sampling}
 \usage{
-hello()
+myGWAS_sampling()
 }
 \description{
-Prints 'Hello, world!'.
+Fit a model by MCMC sampling.
 }
 \examples{
 }

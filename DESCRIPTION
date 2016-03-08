@@ -9,3 +9,5 @@ Description: bayes.glmm is a R package for GWAS in Bayesian framework. Main feat
 License: GPL-2
 LazyData: TRUE
 Imports: rstan
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
