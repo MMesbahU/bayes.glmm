@@ -8,5 +8,4 @@ hello()
 Prints 'Hello, world!'.
 }
 \examples{
-hello()
 }

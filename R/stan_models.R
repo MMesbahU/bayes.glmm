@@ -1,8 +1,3 @@
-# Hello, world!
-#
-# This is an example function named 'hello' 
-# which prints 'Hello, world!'.
-#
 # You can learn more about package authoring with RStudio at:
 #
 #   http://r-pkgs.had.co.nz/
@@ -13,6 +8,17 @@
 #   Check Package:             'Cmd + Shift + E'
 #   Test Package:              'Cmd + Shift + T'
 
-hello <- function() {
-  print("Hello, world!")
+stan_models <- function(type) {
+
+  if(! type %in% c("glm", "glmm"))
+    stop("Error: \"type\" must be \"glm\" or \"glmm\".")
+
+  if(type == "glm")
+    model = stan_model("./lib/noK.stan")
+
+  if(type == "glmm")
+    model = stan_model("./lib/glmm.stan")
+
+  return(model)
+
 }
