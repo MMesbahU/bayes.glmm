@@ -8,7 +8,7 @@ myGWAS_optimizing <- function(model, geno, data0) {
   y = matrix(nrow = N1, ncol = 8, dimnames = list(vId, c(pId, "se", "lp")))
 
   for (i in 1:N1) {
-    data1 = within(data0, {g = geno[i, ]})
+    data1 = within(data0, {geno = geno[i, ]})
     fit1 = optimizing(model, verbose = FALSE, hessian = TRUE, algorithm = "LBFGS", data = data1)
 
     se1 = sqrt(diag(solve(-fit1$hessian)))["p"]

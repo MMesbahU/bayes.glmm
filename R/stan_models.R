@@ -10,11 +10,13 @@
 
 stan_models <- function(type) {
 
+  mydir = find.package("bayes.glmm")
   if(! type %in% c("glm", "glmm"))
     stop("Error: \"type\" must be \"glm\" or \"glmm\".")
 
   if(type == "glm")
-    model = stan_model("./lib/noK.stan")
+    mypath = paste0(mydir, "/", "lib/glm.stan")
+    model = stan_model(mypath)
 
   if(type == "glmm")
     model = stan_model("./lib/glmm.stan")
