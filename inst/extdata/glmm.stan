@@ -7,7 +7,7 @@ data {
   int<lower=0,upper=K> pheno[N];  // phenotype data
   int<lower=0,upper=1> prior_non; // non-informative prior
   real prior_inf; // informative prior
-  cholesky_factor_cov[N] L;  // covariance of multivariate normal model 
+  cholesky_factor_cov[N] L;  // covariance of multivariate normal model
 }
 
 parameters {
@@ -40,6 +40,15 @@ transformed parameters {
 }
 
 model {
+  t ~ normal(prior_inf, 1); // standarized size of variant effect
+  sigma_inf ~ inv_gamma(2, 1); // variance of variant effect
+
+  sigma_gau ~ inv_gamma(2, 1);
+  cut1 ~ dirichlet(rep_vector(1, K-1));
+
+  sigma_ran ~ inv_gamma(2, 1);
+  z ~ normal(0, sigma_ran);
+
   if (prior_non == 1) { // otherwise use flat prior for all parameters
     a ~ normal(0, 1); // intercept
     beta ~ normal(0, 1); // covariates
@@ -48,15 +57,11 @@ model {
       p ~ normal(0, 1); // variant effect
     }
     if (prior_inf != 0) { // informative prior for variant effect
-      t ~ normal(prior_inf, 1); // standarized size of variant effect
-      sigma_inf ~ inv_gamma(2, 1); // variance of variant effect
       p ~ normal(mu, sigma_inf); // variant effect
     }
   } // end of if flow for specifying priors
 
   if (K == 1) { // Gaussian model
-    sigma_gau ~ inv_gamma(2, 1);
-
     for (n in 1:N)
       pheno[n] ~ normal(a + p * geno[n] + cov[n] * beta + u[n], sigma_gau);
   }
@@ -67,8 +72,6 @@ model {
   }
 
   if (K > 2) { // ordered categorical model
-    cut1 ~ dirichlet(rep_vector(1, K-1));
-
     for (n in 1:N)
       pheno[n] ~ ordered_logistic(a + p * geno[n] + cov[n] * beta + u[n], cut);
   }

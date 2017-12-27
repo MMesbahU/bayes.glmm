@@ -34,21 +34,21 @@ L <- t(chol(data$K))
 # myglmm = stan_model("~/GitHub/bayes.glmm/inst/extdata/glmm.stan")
 # save(myglmm, file = "~/GitHub/bayes.glmm/inst/extdata/glmm.rdt")
 
-dt0 = list(N = 576, K = 4, D = 2, cov = cov, L = L, geno = g0, pheno = pheno)
-data0$prior_non = 1
-data0$prior_inf = 0
-optimizing(model, data = data0)
+# dt0 = list(N = 576, K = 4, D = 2, cov = cov, L = L, pheno = pheno)
+# dt0$geno = rep(0, 576)
+# dt0$prior_non = 1
+# dt0$prior_inf = 0
+# y1 = optimizing(myglm, data = dt0)
+# y2 = sampling(myglm, data = dt0, chains = 3, cores = 3)
+# y2 = sampling(myglm, data = dt0, chains = 3, cores = 3, pars = pId, control = list(adapt_delta = .9))
 
+# use bayes.glmm function
 mymodel = stan_models(model = "glm")
 
-config0 = list(chains = 3, iter = 400, warmup = 200, cores = 3)
-
-g0 = rep(0, 576)
-data0 = list(N = 576, K = 4, D = 2, cov = cov, L = L, g = g0, pheno = pheno)
-data0$prior_non = 1
-data0$prior_inf = 0
-
 y1 = myGWAS_fit(model = mymodel, method = "optimizing", type = "categorical", cov = cov, geno = geno[c(1, 3), ], pheno = pheno)
+y1
+
 y2 = myGWAS_fit(model = mymodel, method = "sampling", type = "categorical", cov = cov, geno = geno[c(1, 3), ], pheno = pheno)
+y2
 
 ```

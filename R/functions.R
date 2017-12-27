@@ -8,6 +8,17 @@
 #   Check Package:             'Cmd + Shift + E'
 #   Test Package:              'Cmd + Shift + T'
 
+#' Choose a stan model ("glm" or "glmm").
+#'
+#' @param model model type ("glm" or "glmm)
+#' @param rebuild whether to rebuild the stan model from source (TRUE or FALSE)
+#' @return A stan model in rstan::stanmodel class
+#' @seealso \code{\link{extdata/*.stan}} for source code.
+#' @export
+#' @examples
+#' stan_models("glm", rebuild = F)
+#' stan_models("glmm", rebuild = F)
+#' @author Xulong Wang, \email{xwang@@jax.org}
 stan_models <- function(
   model = "dummy",
   rebuild = F
@@ -45,6 +56,28 @@ stan_models <- function(
 
 }
 
+#' Fit a stan model.
+#'
+#' @param model A stan model of rstan:stanmodel class.
+#' @param method Method to estimate model parameters ("optimizing", or "sampling").
+#' @param type Variable type of the response variable ("linear", "binary", "categorical").
+#' @param cov A matrix of model covariates.
+#' @param geno A vector of variant genotype data (0, 1, 2).
+#' @param pheno A vector of response variable data.
+#' @return A list of model fit.
+#' @seealso \code{\link{rstan package}} which this function wraps
+#' @export
+#' @examples
+#' myGWAS_fit(mymodel, rebuild = F)
+#' data("sample", package = "bayes.glmm")
+#' pheno = data$pheno
+#' geno = data$geno
+#' cov = data$cov
+#' L <- t(chol(data$K))
+#' mymodel = stan_models(model = "glm")
+#' y1 = myGWAS_fit(model = mymodel, method = "optimizing", type = "categorical", cov = cov, geno = geno[c(1, 3), ], pheno = pheno)
+#' y2 = myGWAS_fit(model = mymodel, method = "sampling", type = "categorical", cov = cov, geno = geno[c(1, 3), ], pheno = pheno)
+#' @author Xulong Wang, \email{xwang@@jax.org}
 myGWAS_fit <- function(
   model = "dummy", # stan model
   method = "dummy", # inference method
@@ -103,7 +136,7 @@ myGWAS_fit <- function(
 
     if(method == "sampling") {
       out = sampling(model, data = dt1, chains = chains, iter = iter, warmup = warmup, cores = cores)
-      fit[[i]] = summary(out, pars = pId)$summary
+      fit[[i]] = summary(out, pars = pId)
     }
   }
 
