@@ -8,6 +8,6 @@ Maintainer: Xulong Wang <xulong.wang@jax.org>
 Description: bayes.glmm is a R package for GWAS in Bayesian framework. Main features inlcude: (1) support quantitative, binary, and categorical phenotypes; (2) support kinship-based mixed term to correct population structure and sample relatedness; (3) support MCMC sampling and MLE for parameter estimations; (4) support prior knowledge integration.
 License: GPL-2
 LazyData: TRUE
-Imports: rstan
+Depends: rstan
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr

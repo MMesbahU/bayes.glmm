@@ -26,20 +26,20 @@ data("sample", package = "bayes.glmm")
 pheno = data$pheno
 geno = data$geno
 cov = data$cov
-K = data$K
-L <- t(chol(K))
+L <- t(chol(data$K))
 
-# debug - start
-model = stan_model("~/GitHub/bayes.glmm/lib/glm.stan")
-g0 = rep(0, 576)
-data0 = list(N = 576, K = 4, D = 2, cov = cov, L = L, geno = g0, pheno = pheno)
+# package data
+# myglm = stan_model("~/GitHub/bayes.glmm/inst/extdata/glm.stan")
+# save(myglm, file = "~/GitHub/bayes.glmm/inst/extdata/glm.rdt")
+# myglmm = stan_model("~/GitHub/bayes.glmm/inst/extdata/glmm.stan")
+# save(myglmm, file = "~/GitHub/bayes.glmm/inst/extdata/glmm.rdt")
+
+dt0 = list(N = 576, K = 4, D = 2, cov = cov, L = L, geno = g0, pheno = pheno)
 data0$prior_non = 1
 data0$prior_inf = 0
 optimizing(model, data = data0)
 
-# end - end
-
-model = data$model
+mymodel = stan_models(model = "glm")
 
 config0 = list(chains = 3, iter = 400, warmup = 200, cores = 3)
 
@@ -48,7 +48,7 @@ data0 = list(N = 576, K = 4, D = 2, cov = cov, L = L, g = g0, pheno = pheno)
 data0$prior_non = 1
 data0$prior_inf = 0
 
-y = myGWAS_optimizing(model = model, geno = geno[1:5, ], data0)
-# y = myGWAS_sampling(model = model, geno = geno[1:5, ], data0, config0)
+y1 = myGWAS_fit(model = mymodel, method = "optimizing", type = "categorical", cov = cov, geno = geno[c(1, 3), ], pheno = pheno)
+y2 = myGWAS_fit(model = mymodel, method = "sampling", type = "categorical", cov = cov, geno = geno[c(1, 3), ], pheno = pheno)
 
 ```
